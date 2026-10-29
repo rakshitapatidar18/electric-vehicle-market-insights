@@ -13,3 +13,6 @@ requests>=2.31.0
 
 # Testing Framework
 pytest>=8.0.0
+
+# Production server for Render
+gunicorn
