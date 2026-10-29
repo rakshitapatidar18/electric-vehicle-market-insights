@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Tableau BI Dashboard - EV Market Performance & Insights{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Tableau Business Intelligence Dashboard</h1>
+    <p class="page-subtitle">Interactive Tableau BI workbook integrating executive KPI cards, manufacturer comparison, and battery technology insights.</p>
+</div>
+
+{% if tableau_url %}
+    <!-- Active Published Tableau Dashboard Embed -->
+    <div class="card" style="padding: 0.5rem; background: #000;">
+        <div style="position: relative; width: 100%; height: 850px;">
+            <iframe src="{{ tableau_url }}" 
+                    width="100%" 
+                    height="100%" 
+                    frameborder="0" 
+                    allowfullscreen 
+                    style="border: none; border-radius: var(--radius-sm);">
+            </iframe>
+        </div>
+    </div>
+{% else %}
+    <!-- Tableau Public Connection & Publication Guidance Fallback -->
+    <div class="card" style="border-top: 4px solid var(--accent-cyan);">
+        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem;">
+            <div style="background: rgba(6, 182, 212, 0.15); width: 48px; height: 48px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                📊
+            </div>
+            <div>
+                <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">Tableau Workbook Integration Guide</h2>
+                <p style="color: var(--text-secondary); font-size: 0.92rem;">
+                    A published Tableau Public URL is not configured yet. Follow these verified steps to connect your data and publish your dashboard.
+                </p>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 1.75rem;">
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+                <span class="kpi-badge badge-blue" style="margin-bottom: 0.5rem; display: inline-block;">Step 1</span>
+                <h3 style="font-size: 1rem; color: var(--text-primary); margin-bottom: 0.4rem;">Connect Prepared CSV</h3>
+                <p style="font-size: 0.88rem; color: var(--text-secondary);">
+                    Open Tableau Desktop or Tableau Public. Click <strong>Connect to Data → Text File</strong>, and select the pre-engineered master file:
+                </p>
+                <code style="display: block; margin-top: 0.5rem; word-break: break-all; font-size: 0.82rem;">data/processed/ev_tableau_export.csv</code>
+            </div>
+
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+                <span class="kpi-badge badge-green" style="margin-bottom: 0.5rem; display: inline-block;">Step 2</span>
+                <h3 style="font-size: 1rem; color: var(--text-primary); margin-bottom: 0.4rem;">Construct 3-Scene Story</h3>
+                <p style="font-size: 0.88rem; color: var(--text-secondary);">
+                    Create the 3 required scenes:
+                </p>
+                <ul style="font-size: 0.84rem; color: var(--text-secondary); padding-left: 1.2rem; margin-top: 0.35rem;">
+                    <li><strong>Scene 1:</strong> EV Market Overview & KPIs</li>
+                    <li><strong>Scene 2:</strong> Manufacturer & Category Comparison</li>
+                    <li><strong>Scene 3:</strong> Battery Chemistry & Driving Range</li>
+                </ul>
+            </div>
+
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+                <span class="kpi-badge badge-amber" style="margin-bottom: 0.5rem; display: inline-block;">Step 3</span>
+                <h3 style="font-size: 1rem; color: var(--text-primary); margin-bottom: 0.4rem;">Publish & Configure URL</h3>
+                <p style="font-size: 0.88rem; color: var(--text-secondary);">
+                    Publish the workbook to your free Tableau Public profile. Copy the share URL, and set the environment variable in your terminal:
+                </p>
+                <code style="display: block; margin-top: 0.5rem; font-size: 0.82rem;">$env:TABLEAU_EMBED_URL="https://public.tableau.com/views/..."</code>
+            </div>
+        </div>
+
+        <div style="background: rgba(2, 132, 199, 0.1); border: 1px solid rgba(2, 132, 199, 0.3); border-radius: var(--radius-sm); padding: 1rem;">
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                💡 <strong>Pre-engineered Data Ready:</strong> All 6 Tableau-ready CSV exports have been generated in <code>data/processed/</code>. The master file includes enriched calculated dimensions (<code>price_tier</code>, <code>range_tier</code>, <code>cost_per_km_range</code>, and <code>power_to_weight_ratio</code>).
+            </p>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

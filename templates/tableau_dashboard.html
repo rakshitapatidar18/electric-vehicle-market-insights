@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Business Intelligence Dashboard (Plotly) – EV Market{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">EV Business Intelligence Dashboard</h1>
+    <p class="page-subtitle">Interactive Plotly visualisations built from pre‑exported KPI CSVs.</p>
+</div>
+
+<!-- KPI Cards -->
+<div class="grid-4" style="margin-bottom: 2rem; gap: 1rem;">
+{% for label, value in kpi_cards.items() %}
+    <div class="card" style="background: var(--bg-card); padding: 1rem; text-align: center;">
+        <h3 style="margin: 0; font-size: 1.2rem; color: var(--text-primary);">{{ label }}</h3>
+        <p style="margin: 0.3rem 0 0; font-size: 1.4rem; font-weight: 600; color: var(--accent-cyan);">{{ value }}</p>
+    </div>
+{% endfor %}
+</div>
+
+<!-- Charts Grid -->
+<div class="grid-2" style="gap: 1.5rem;">
+    <div class="card">
+        <h2 class="card-title">Top Manufacturers – Sales Volume</h2>
+        <div id="chart-mfg" style="height: 420px;"></div>
+    </div>
+    <div class="card">
+        <h2 class="card-title">Vehicle Category – Sales Volume</h2>
+        <div id="chart-cat" style="height: 420px;"></div>
+    </div>
+    <div class="card">
+        <h2 class="card-title">Battery Chemistry – Sales Volume</h2>
+        <div id="chart-bat" style="height: 420px;"></div>
+    </div>
+    <div class="card">
+        <h2 class="card-title">Yearly Market Trends</h2>
+        <div id="chart-year" style="height: 420px;"></div>
+    </div>
+    <div class="card">
+        <h2 class="card-title">Country‑wise Production & Sales</h2>
+        <div id="chart-country" style="height: 420px;"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const figMfg = {{ chart_mfg_json | safe }};
+    Plotly.newPlot('chart-mfg', figMfg.data, figMfg.layout, {responsive:true, displayModeBar:false});
+    const figCat = {{ chart_cat_json | safe }};
+    Plotly.newPlot('chart-cat', figCat.data, figCat.layout, {responsive:true, displayModeBar:false});
+    const figBat = {{ chart_bat_json | safe }};
+    Plotly.newPlot('chart-bat', figBat.data, figBat.layout, {responsive:true, displayModeBar:false});
+    const figYear = {{ chart_year_json | safe }};
+    Plotly.newPlot('chart-year', figYear.data, figYear.layout, {responsive:true, displayModeBar:false});
+    const figCountry = {{ chart_country_json | safe }};
+    Plotly.newPlot('chart-country', figCountry.data, figCountry.layout, {responsive:true, displayModeBar:false});
+</script>
+{% endblock %}

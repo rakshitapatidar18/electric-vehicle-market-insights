@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Manufacturer Analysis - EV Market Performance & Insights{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Automotive Manufacturer Competitiveness</h1>
+    <p class="page-subtitle">Evaluating automaker volume delivery, revenue generation, model depth, and market share dispersion.</p>
+</div>
+
+<!-- Charts Grid -->
+<div class="grid-2">
+    <div class="card">
+        <h2 class="card-title">Top 15 Automakers by Sales Volume</h2>
+        <p class="card-subtitle">Annual sales unit deliveries across leading electric vehicle brands.</p>
+        <div id="chart-mfg-sales" style="height: 420px;"></div>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">Market Share Concentration</h2>
+        <p class="card-subtitle">Global sales unit distribution among top manufacturers vs other players.</p>
+        <div id="chart-mfg-share" style="height: 420px;"></div>
+    </div>
+</div>
+
+<!-- Detailed Data Table -->
+<div class="card">
+    <h2 class="card-title">Manufacturer Performance Benchmark Table</h2>
+    <p class="card-subtitle">Detailed financial and technical specifications across top automotive producers.</p>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Manufacturer</th>
+                    <th>Models Offered</th>
+                    <th>Annual Sales</th>
+                    <th>Revenue ($M USD)</th>
+                    <th>Avg Price ($)</th>
+                    <th>Avg Range (km)</th>
+                    <th>Customer Rating</th>
+                    <th>Market Share</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in manufacturers_table %}
+                <tr>
+                    <td><strong>#{{ loop.index }}</strong></td>
+                    <td style="color: var(--accent-cyan); font-weight: 600;">{{ row.manufacturer }}</td>
+                    <td>{{ "{:,}".format(row.total_models_offered) }}</td>
+                    <td><strong>{{ "{:,}".format(row.total_sales_units) }}</strong></td>
+                    <td>${{ "{:,.1f}".format(row.revenue_million_usd) }}M</td>
+                    <td>${{ "{:,.2f}".format(row.avg_vehicle_price) }}</td>
+                    <td>{{ row.avg_range_km }} km</td>
+                    <td>★ {{ "{:.2f}".format(row.avg_rating) }}</td>
+                    <td><span class="kpi-badge badge-blue">{{ row.market_share_pct }}%</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const chartSales = {{ chart_mfg_sales_json | safe }};
+    Plotly.newPlot('chart-mfg-sales', chartSales.data, chartSales.layout, {responsive: true, displayModeBar: false});
+
+    const chartShare = {{ chart_mfg_share_json | safe }};
+    Plotly.newPlot('chart-mfg-share', chartShare.data, chartShare.layout, {responsive: true, displayModeBar: false});
+</script>
+{% endblock %}

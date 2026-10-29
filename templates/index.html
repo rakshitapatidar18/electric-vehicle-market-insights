@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Overview - EV Market Performance & Insights{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h1 class="page-title">Electric Vehicle Market Performance & Insights</h1>
+            <p class="page-subtitle">An end-to-end data analytics and business intelligence platform analyzing 299,999 electric vehicles across 200 global automakers.</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Open Dashboard →</a>
+            <a href="{{ url_for('explorer') }}" class="btn btn-secondary">Explore Raw Fleet</a>
+        </div>
+    </div>
+</div>
+
+<!-- Executive KPI Cards -->
+<div class="kpi-grid">
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title">Fleet Sample</span>
+            <span class="kpi-badge badge-blue">Global</span>
+        </div>
+        <div class="kpi-value">{{ "{:,}".format(kpis.total_vehicles) }}</div>
+        <div class="kpi-subtitle">Distinct vehicle models analyzed</div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title">Automakers</span>
+            <span class="kpi-badge badge-green">{{ kpis.total_manufacturers }} Brands</span>
+        </div>
+        <div class="kpi-value">{{ kpis.total_manufacturers }}</div>
+        <div class="kpi-subtitle">Across {{ kpis.total_manufacturing_countries }} manufacturing nations</div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title">Avg Driving Range</span>
+            <span class="kpi-badge badge-cyan">WLTP/EPA</span>
+        </div>
+        <div class="kpi-value">{{ kpis.avg_driving_range_km }} <span style="font-size: 1rem; color: var(--text-muted);">km</span></div>
+        <div class="kpi-subtitle">Max range: {{ kpis.max_driving_range_km }} km</div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title">Avg Battery Pack</span>
+            <span class="kpi-badge badge-purple">Usable</span>
+        </div>
+        <div class="kpi-value">{{ kpis.avg_battery_capacity_kwh }} <span style="font-size: 1rem; color: var(--text-muted);">kWh</span></div>
+        <div class="kpi-subtitle">5 distinct cell chemistries</div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title">Avg Vehicle MSRP</span>
+            <span class="kpi-badge badge-amber">USD</span>
+        </div>
+        <div class="kpi-value">${{ "{:,.2f}".format(kpis.avg_price_usd) }}</div>
+        <div class="kpi-subtitle">Range: ${{ "{:,.0f}".format(kpis.min_price_usd) }} – ${{ "{:,.0f}".format(kpis.max_price_usd) }}</div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-header">
+            <span class="kpi-title">Total Sales Volume</span>
+            <span class="kpi-badge badge-green">Units</span>
+        </div>
+        <div class="kpi-value">{{ "{:,.0f}".format(kpis.total_annual_sales_units / 1000000) }}M</div>
+        <div class="kpi-subtitle">Revenue: ${{ "{:,.2f}".format(kpis.total_revenue_billion_usd / 1000) }}T USD</div>
+    </div>
+</div>
+
+<!-- Architecture & Project Scope -->
+<div class="grid-2">
+    <div class="card">
+        <h2 class="card-title">Solution Architecture</h2>
+        <p class="card-subtitle">Engineered with modular Python pipelines, SQLite relational storage, and interactive visualization layers.</p>
+        
+        <div style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.9rem;">
+            <p style="margin-bottom: 0.6rem;">⚡ <strong>Data Pipeline:</strong> Raw CSVs (300k rows) → Deduplication & Domain Median Imputation → Cleaned Dataset</p>
+            <p style="margin-bottom: 0.6rem;">🗄️ <strong>Database:</strong> Normalized SQLite 3NF Schema (6 tables, 10 indexes, 0 FK errors)</p>
+            <p style="margin-bottom: 0.6rem;">📊 <strong>Analytics Engine:</strong> Reusable Pandas routines with 100% KPI parity with SQL</p>
+            <p style="margin-bottom: 0.6rem;">🌐 <strong>Web Application:</strong> Responsive Flask framework with interactive Plotly visual charts</p>
+            <p>📈 <strong>Business Intelligence:</strong> Tableau Public export pipeline with enriched calculated dimensions</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">Core Analytical Modules</h2>
+        <p class="card-subtitle">Navigate through the dedicated business intelligence perspectives:</p>
+
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <a href="{{ url_for('dashboard') }}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-decoration: none; color: var(--text-primary);">
+                <div>
+                    <strong>Market Dashboard</strong>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary);">Category comparisons, driving range vs price, regional sales volume</div>
+                </div>
+                <span>→</span>
+            </a>
+
+            <a href="{{ url_for('manufacturers') }}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-decoration: none; color: var(--text-primary);">
+                <div>
+                    <strong>Manufacturer Competitiveness</strong>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary);">Top 20 automakers, market share concentration, portfolio depth</div>
+                </div>
+                <span>→</span>
+            </a>
+
+            <a href="{{ url_for('batteries') }}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-decoration: none; color: var(--text-primary);">
+                <div>
+                    <strong>Battery Technology Analysis</strong>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary);">LFP vs NMC vs Solid-State vs Sodium-Ion degradation & cycle life</div>
+                </div>
+                <span>→</span>
+            </a>
+
+            <a href="{{ url_for('explorer') }}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-decoration: none; color: var(--text-primary);">
+                <div>
+                    <strong>Data Explorer</strong>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary);">Search, filter, and paginate through 299,999 individual vehicle specifications</div>
+                </div>
+                <span>→</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

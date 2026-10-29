@@ -1,0 +1,6 @@
+battery_type,total_models_deployed,avg_capacity_kwh,avg_range_km,avg_cycle_life_cycles,avg_5yr_degradation_pct,avg_fast_charge_min,avg_cost_per_km_range,total_sales_units
+NMC,101508,78.2,324.2,1801.0,14.02,21.1,203.81,787702452
+LFP,96137,78.3,324.4,2501.0,10.12,21.1,202.6,748465716
+NCA,51333,78.0,325.0,1601.0,14.03,21.1,201.62,403080826
+Sodium-Ion,29925,78.3,325.5,1798.0,14.0,21.0,203.72,230481271
+Solid-State,21096,78.7,322.9,2998.0,7.42,21.1,203.92,166477936

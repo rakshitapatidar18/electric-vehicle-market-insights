@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Battery Technology Analysis - EV Market Performance & Insights{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Battery Chemistry & Technology Performance</h1>
+    <p class="page-subtitle">Comparative benchmark of cell chemistry adoption, 5-year degradation, cycle durability, and charging dynamics.</p>
+</div>
+
+<!-- Charts Grid 1 -->
+<div class="grid-2">
+    <div class="card">
+        <h2 class="card-title">Chemistry Adoption & Market Share</h2>
+        <p class="card-subtitle">Distribution of battery chemistry formulations across the global EV fleet.</p>
+        <div id="chart-battery-share" style="height: 420px;"></div>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">Degradation Rate vs Cycle Life</h2>
+        <p class="card-subtitle">5-Year degradation percentage (lower is better) vs total rated charge cycles.</p>
+        <div id="chart-battery-degradation" style="height: 420px;"></div>
+    </div>
+</div>
+
+<!-- Charts Grid 2 -->
+<div class="grid-2">
+    <div class="card">
+        <h2 class="card-title">Fast Charging Times by Chemistry</h2>
+        <p class="card-subtitle">Average DC fast charging duration (10% to 80% charge in minutes).</p>
+        <div id="chart-battery-charging" style="height: 400px;"></div>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">Battery Cost per KM Range</h2>
+        <p class="card-subtitle">Average vehicle acquisition cost per kilometer of delivered driving range.</p>
+        <div id="chart-battery-cost" style="height: 400px;"></div>
+    </div>
+</div>
+
+<!-- Battery Chemistry Benchmark Table -->
+<div class="card">
+    <h2 class="card-title">Battery Chemistry Engineering Metrics</h2>
+    <p class="card-subtitle">Empirical performance comparisons across the 5 primary EV cell formulations.</p>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Battery Chemistry</th>
+                    <th>Full Name / Formulation</th>
+                    <th>Models Deployed</th>
+                    <th>Avg Pack (kWh)</th>
+                    <th>Avg Range (km)</th>
+                    <th>5-Yr Degradation</th>
+                    <th>Rated Cycle Life</th>
+                    <th>DC Fast Charge</th>
+                    <th>Cost / km Range</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in battery_table %}
+                <tr>
+                    <td><strong>{{ row.battery_type }}</strong></td>
+                    <td style="color: var(--text-secondary);">
+                        {% if row.battery_type == 'NMC' %}Nickel Manganese Cobalt
+                        {% elif row.battery_type == 'LFP' %}Lithium Iron Phosphate
+                        {% elif row.battery_type == 'NCA' %}Nickel Cobalt Aluminum Oxide
+                        {% elif row.battery_type == 'Solid-State' %}Solid-State Electrolyte
+                        {% elif row.battery_type == 'Sodium-Ion' %}Sodium-Ion Next-Gen
+                        {% else %}{{ row.battery_type }}{% endif %}
+                    </td>
+                    <td>{{ "{:,}".format(row.total_models_deployed) }}</td>
+                    <td>{{ row.avg_capacity_kwh }} kWh</td>
+                    <td><strong>{{ row.avg_range_km }} km</strong></td>
+                    <td style="color: {% if row.avg_5yr_degradation_pct < 11 %}var(--accent-emerald){% else %}var(--accent-amber){% endif %}; font-weight: 600;">
+                        {{ row.avg_5yr_degradation_pct }}%
+                    </td>
+                    <td>{{ "{:,.0f}".format(row.avg_cycle_life_cycles) }} cycles</td>
+                    <td>{{ row.avg_fast_charge_min }} min</td>
+                    <td>${{ "{:.2f}".format(row.avg_cost_per_km_range) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    const chartShare = {{ chart_battery_share_json | safe }};
+    Plotly.newPlot('chart-battery-share', chartShare.data, chartShare.layout, {responsive: true, displayModeBar: false});
+
+    const chartDeg = {{ chart_battery_deg_json | safe }};
+    Plotly.newPlot('chart-battery-degradation', chartDeg.data, chartDeg.layout, {responsive: true, displayModeBar: false});
+
+    const chartCharge = {{ chart_battery_charge_json | safe }};
+    Plotly.newPlot('chart-battery-charging', chartCharge.data, chartCharge.layout, {responsive: true, displayModeBar: false});
+
+    const chartCost = {{ chart_battery_cost_json | safe }};
+    Plotly.newPlot('chart-battery-cost', chartCost.data, chartCost.layout, {responsive: true, displayModeBar: false});
+</script>
+{% endblock %}

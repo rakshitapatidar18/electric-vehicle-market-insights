@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}About - EV Market Performance & Insights{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">About the Project</h1>
+    <p class="page-subtitle">Academic & technical overview of the Electric Vehicle Market Performance & Insights analytics solution.</p>
+</div>
+
+<div class="grid-2">
+    <!-- Student & Project Scope -->
+    <div class="card">
+        <h2 class="card-title">Project Overview</h2>
+        <p class="card-subtitle">B.Tech Artificial Intelligence and Data Science Individual Capstone Portfolio Project.</p>
+
+        <div style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.7;">
+            <p style="margin-bottom: 0.8rem;">
+                <strong>Objective:</strong> To engineer an end-to-end business intelligence and data analytics solution that evaluates the global electric vehicle market across manufacturer competitiveness, battery chemistry performance, driving range trade-offs, pricing dynamics, and geographical assembly hubs.
+            </p>
+            <p style="margin-bottom: 0.8rem;">
+                <strong>Dataset Integrity:</strong> The solution processes <strong>299,999 distinct vehicle records</strong> spanning 200 global automakers, 15 vehicle categories, and 5 battery chemistries across model years 2018 to 2026.
+            </p>
+            <p>
+                <strong>Academic Scope:</strong> Pure data analytics, relational SQL modeling, statistical profiling, and business intelligence dashboarding. No machine learning models are trained; real empirical metrics and domain median imputations govern the analytics pipeline.
+            </p>
+        </div>
+    </div>
+
+    <!-- Technology Stack -->
+    <div class="card">
+        <h2 class="card-title">Technology Stack</h2>
+        <p class="card-subtitle">Modern open-source data engineering and web technologies.</p>
+
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.92rem;">
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+                <strong>Programming Language:</strong>
+                <span style="color: var(--accent-cyan);">Python 3.14+</span>
+            </li>
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+                <strong>Data Processing & Analysis:</strong>
+                <span style="color: var(--accent-cyan);">Pandas & NumPy</span>
+            </li>
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+                <strong>Relational Database:</strong>
+                <span style="color: var(--accent-cyan);">SQLite 3 (3NF Normalized)</span>
+            </li>
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+                <strong>Interactive Visualization:</strong>
+                <span style="color: var(--accent-cyan);">Plotly & Tableau Public</span>
+            </li>
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+                <strong>Web Application Backend:</strong>
+                <span style="color: var(--accent-cyan);">Flask 3.1+</span>
+            </li>
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem;">
+                <strong>Automated Testing:</strong>
+                <span style="color: var(--accent-cyan);">Pytest</span>
+            </li>
+            <li style="display: flex; justify-content: space-between; padding-bottom: 0.4rem;">
+                <strong>Version Control:</strong>
+                <span style="color: var(--accent-cyan);">Git & GitHub</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Documentation Links -->
+<div class="card">
+    <h2 class="card-title">Project Documentation & Technical Deliverables</h2>
+    <p class="card-subtitle">Verified project reports and data dictionaries included in the codebase:</p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <div style="padding: 1rem; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+            <h3 style="color: var(--accent-cyan); font-size: 1rem; margin-bottom: 0.35rem;">📘 Data Dictionary</h3>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Comprehensive specification of all 38 columns, data types, physical units, and boundaries.</p>
+            <code>reports/data_dictionary.md</code>
+        </div>
+
+        <div style="padding: 1rem; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+            <h3 style="color: var(--accent-emerald); font-size: 1rem; margin-bottom: 0.35rem;">📊 Data Profiling Report</h3>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Audit of schemas, 0 ID collisions between train/test, and domain imputation logs.</p>
+            <code>reports/data_profiling_report.md</code>
+        </div>
+
+        <div style="padding: 1rem; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
+            <h3 style="color: var(--accent-amber); font-size: 1rem; margin-bottom: 0.35rem;">📈 Business Insights Report</h3>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Strategic market report with executive findings, OEM benchmarks, and policy insights.</p>
+            <code>reports/insights_report.md</code>
+        </div>
+    </div>
+</div>
+{% endblock %}

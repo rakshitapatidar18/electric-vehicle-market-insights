@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Electric Vehicle Market Performance & Insights{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Plotly.js CDN for interactive visualizations -->
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="nav-brand">
+                <span class="brand-icon">⚡</span>
+                <span>EV Market Insights</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}" class="{% if request.endpoint == 'index' %}active{% endif %}">Overview</a></li>
+                <li><a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard' %}active{% endif %}">Market Dashboard</a></li>
+                <li><a href="{{ url_for('manufacturers') }}" class="{% if request.endpoint == 'manufacturers' %}active{% endif %}">Manufacturers</a></li>
+                <li><a href="{{ url_for('batteries') }}" class="{% if request.endpoint == 'batteries' %}active{% endif %}">Battery Tech</a></li>
+                <li><a href="{{ url_for('explorer') }}" class="{% if request.endpoint == 'explorer' %}active{% endif %}">Data Explorer</a></li>
+                <li><a href="{{ url_for('tableau_embed') }}" class="{% if request.endpoint == 'tableau_embed' %}active{% endif %}">Tableau BI</a></li>
+                <li><a href="{{ url_for('about') }}" class="{% if request.endpoint == 'about' %}active{% endif %}">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="footer">
+        <div class="nav-container" style="justify-content: center; flex-direction: column; gap: 0.35rem;">
+            <p><strong>Electric Vehicle Market Performance & Insights</strong> — Individual Data Analytics Portfolio Project</p>
+            <p>Built with Python, Pandas, SQLite, Plotly, Flask, and Tableau Public | B.Tech Artificial Intelligence & Data Science</p>
+        </div>
+    </footer>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

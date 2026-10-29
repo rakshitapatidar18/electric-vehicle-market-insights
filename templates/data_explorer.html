@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Data Explorer - EV Market Performance & Insights{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">EV Fleet Data Explorer</h1>
+    <p class="page-subtitle">Interactive search, multi-attribute filtering, and specification exploration across 299,999 individual vehicle profiles.</p>
+</div>
+
+<!-- Search & Multi-Filter Bar -->
+<form method="GET" action="{{ url_for('explorer') }}" class="filter-bar">
+    <div class="filter-group" style="flex: 1; min-width: 200px;">
+        <label for="q" class="filter-label">Search Model or Manufacturer</label>
+        <input type="text" name="q" id="q" value="{{ search_query }}" placeholder="e.g. Drift, Nova, Ampere..." class="form-control">
+    </div>
+
+    <div class="filter-group">
+        <label for="category" class="filter-label">Category</label>
+        <select name="category" id="category" class="form-select">
+            <option value="All" {% if selected_category == 'All' %}selected{% endif %}>All Categories</option>
+            {% for cat in categories %}
+            <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label for="battery" class="filter-label">Battery Chemistry</label>
+        <select name="battery" id="battery" class="form-select">
+            <option value="All" {% if selected_battery == 'All' %}selected{% endif %}>All Batteries</option>
+            {% for bat in battery_types %}
+            <option value="{{ bat }}" {% if selected_battery == bat %}selected{% endif %}>{{ bat }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label for="sort_by" class="filter-label">Sort By</label>
+        <select name="sort_by" id="sort_by" class="form-select">
+            <option value="range_km" {% if sort_by == 'range_km' %}selected{% endif %}>Driving Range (km)</option>
+            <option value="price_usd" {% if sort_by == 'price_usd' %}selected{% endif %}>Vehicle Price ($)</option>
+            <option value="annual_sales_units" {% if sort_by == 'annual_sales_units' %}selected{% endif %}>Annual Sales</option>
+            <option value="customer_rating" {% if sort_by == 'customer_rating' %}selected{% endif %}>Customer Rating</option>
+            <option value="model_year" {% if sort_by == 'model_year' %}selected{% endif %}>Model Year</option>
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <label for="order" class="filter-label">Order</label>
+        <select name="order" id="order" class="form-select">
+            <option value="DESC" {% if sort_order == 'DESC' %}selected{% endif %}>Descending</option>
+            <option value="ASC" {% if sort_order == 'ASC' %}selected{% endif %}>Ascending</option>
+        </select>
+    </div>
+
+    <div style="display: flex; gap: 0.5rem; align-self: flex-end;">
+        <button type="submit" class="btn btn-primary">Apply Filters</button>
+        <a href="{{ url_for('explorer') }}" class="btn btn-secondary">Reset</a>
+    </div>
+</form>
+
+<!-- Table Results Card -->
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <div>
+            <strong>Showing {{ "{:,}".format(total_records) }} vehicles</strong> matching search criteria
+        </div>
+        <div style="font-size: 0.88rem; color: var(--text-muted);">
+            Page {{ page }} of {{ total_pages }} (25 records per page)
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Vehicle ID</th>
+                    <th>Model Name</th>
+                    <th>Manufacturer</th>
+                    <th>Category</th>
+                    <th>Year</th>
+                    <th>Battery</th>
+                    <th>Range (km)</th>
+                    <th>Capacity</th>
+                    <th>Price ($ USD)</th>
+                    <th>Annual Sales</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if vehicles %}
+                    {% for v in vehicles %}
+                    <tr>
+                        <td><code>{{ v.vehicle_id }}</code></td>
+                        <td style="font-weight: 600; color: var(--accent-cyan);">{{ v.model_name }}</td>
+                        <td>{{ v.manufacturer }}</td>
+                        <td><span class="kpi-badge badge-blue">{{ v.category }}</span></td>
+                        <td>{{ v.model_year }}</td>
+                        <td><span class="kpi-badge badge-purple">{{ v.battery_type }}</span></td>
+                        <td><strong>{{ v.range_km }} km</strong></td>
+                        <td>{{ v.battery_capacity_kwh }} kWh</td>
+                        <td><strong>${{ "{:,.2f}".format(v.price_usd) }}</strong></td>
+                        <td>{{ "{:,}".format(v.annual_sales_units) }}</td>
+                        <td>★ {{ "{:.2f}".format(v.customer_rating) }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="11" style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                            No vehicles found matching the selected filter criteria. Try adjusting your search query or filters.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    {% if total_pages > 1 %}
+    <div class="pagination-container">
+        <div class="page-info">
+            Showing record {{ (page - 1) * per_page + 1 }} to {{ [page * per_page, total_records] | min }} of {{ "{:,}".format(total_records) }}
+        </div>
+        <div class="pagination-links">
+            <a href="{{ url_for('explorer', page=1, q=search_query, category=selected_category, battery=selected_battery, sort_by=sort_by, order=sort_order) }}" class="page-btn {% if page == 1 %}disabled{% endif %}">« First</a>
+            <a href="{{ url_for('explorer', page=page-1, q=search_query, category=selected_category, battery=selected_battery, sort_by=sort_by, order=sort_order) }}" class="page-btn {% if page == 1 %}disabled{% endif %}">‹ Prev</a>
+            <span class="page-btn active">{{ page }}</span>
+            <a href="{{ url_for('explorer', page=page+1, q=search_query, category=selected_category, battery=selected_battery, sort_by=sort_by, order=sort_order) }}" class="page-btn {% if page >= total_pages %}disabled{% endif %}">Next ›</a>
+            <a href="{{ url_for('explorer', page=total_pages, q=search_query, category=selected_category, battery=selected_battery, sort_by=sort_by, order=sort_order) }}" class="page-btn {% if page >= total_pages %}disabled{% endif %}">Last »</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Market Dashboard - EV Market Performance & Insights{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">EV Market Intelligence Dashboard</h1>
+    <p class="page-subtitle">Interactive performance benchmarks across vehicle segments, price dynamics, and regional market demand.</p>
+</div>
+
+<!-- Filter Bar -->
+<form method="GET" action="{{ url_for('dashboard') }}" class="filter-bar">
+    <div class="filter-group">
+        <label for="category" class="filter-label">Filter by Vehicle Category</label>
+        <select name="category" id="category" class="form-select" onchange="this.form.submit()">
+            <option value="All" {% if selected_category == 'All' %}selected{% endif %}>All Categories (15)</option>
+            {% for cat in categories %}
+            <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    {% if selected_category != 'All' %}
+    <div style="align-self: flex-end;">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Reset Filter</a>
+    </div>
+    {% endif %}
+</form>
+
+<!-- Chart Grid Row 1 -->
+<div class="grid-2">
+    <div class="card">
+        <h2 class="card-title">Category Sales & Price Comparison</h2>
+        <p class="card-subtitle">Annual sales volume (bars) vs average MSRP (line) across vehicle classes.</p>
+        <div id="chart-category-sales" style="height: 420px;"></div>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">Geographical Market Demand</h2>
+        <p class="card-subtitle">Distribution of annual vehicle sales volume across global market regions.</p>
+        <div id="chart-regional-sales" style="height: 420px;"></div>
+    </div>
+</div>
+
+<!-- Chart Grid Row 2 -->
+<div class="grid-2">
+    <div class="card">
+        <h2 class="card-title">Driving Range vs Vehicle MSRP</h2>
+        <p class="card-subtitle">Evaluating the cost efficiency and range deliverability by category segment.</p>
+        <div id="chart-range-vs-price" style="height: 420px;"></div>
+    </div>
+
+    <div class="card">
+        <h2 class="card-title">Annual Fleet Evolution (2018 - 2026)</h2>
+        <p class="card-subtitle">Sales volume delivery trajectory and average battery capacity growth over time.</p>
+        <div id="chart-annual-trend" style="height: 420px;"></div>
+    </div>
+</div>
+
+<!-- Callout Insights Card -->
+<div class="card" style="border-left: 4px solid var(--accent-cyan);">
+    <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--accent-cyan);">💡 Executive Key Insight</h3>
+    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+        Mass-market adoption centers on the <strong>$25k – $45k price band</strong>, with Sedans and Compact SUVs providing an optimal blend of <strong>370–430 km driving range</strong>. Meanwhile, Two-Wheeler Scooters lead global unit volume at 261M units, powering urban micro-mobility in high-density corridors.
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Render Plotly Charts with responsiveness
+    const chartCat = {{ chart_category_json | safe }};
+    Plotly.newPlot('chart-category-sales', chartCat.data, chartCat.layout, {responsive: true, displayModeBar: false});
+
+    const chartReg = {{ chart_region_json | safe }};
+    Plotly.newPlot('chart-regional-sales', chartReg.data, chartReg.layout, {responsive: true, displayModeBar: false});
+
+    const chartRP = {{ chart_range_price_json | safe }};
+    Plotly.newPlot('chart-range-vs-price', chartRP.data, chartRP.layout, {responsive: true, displayModeBar: false});
+
+    const chartTrend = {{ chart_trend_json | safe }};
+    Plotly.newPlot('chart-annual-trend', chartTrend.data, chartTrend.layout, {responsive: true, displayModeBar: false});
+</script>
+{% endblock %}
